@@ -1,0 +1,281 @@
+C:\Users\IWen\AppData\Roaming\Python\Python312\site-packages\requests\__init__.py:113: RequestsDependencyWarning: urllib3 (1.26.20) or chardet (7.4.1)/charset_normalizer (3.4.3) doesn't match a supported version!
+  warnings.warn(
+INFO:     Started server process [22576]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8866 (Press CTRL+C to quit)
+INFO:     127.0.0.1:12538 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12539 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12538 - "GET /css/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12550 - "GET /vendor/g6/g6.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12551 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12552 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12550 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12550 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12550 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12550 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:12550 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12562 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12563 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12564 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12664 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12664 - "GET /css/style.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12665 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12666 - "GET /vendor/g6/g6.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12665 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12666 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12666 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12666 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12666 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12666 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:12666 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12946 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12946 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12948 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12947 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12949 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12950 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12950 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12950 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:12950 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12950 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:12950 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13001 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13095 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13095 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13097 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13096 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13096 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13097 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13097 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13097 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13097 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13097 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13097 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13097 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13186 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13186 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13187 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13188 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13187 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13188 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13187 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13187 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13187 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13187 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13187 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13187 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13355 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13355 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13355 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13356 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13357 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13358 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13358 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13357 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13357 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13357 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13357 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13357 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13399 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13444 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13476 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13476 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13477 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13478 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13477 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13478 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13477 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13477 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13477 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13477 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13477 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13477 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13487 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13477 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13650 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13650 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13651 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13651 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13651 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13679 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13679 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13680 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13681 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13681 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13681 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13681 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13681 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13681 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13681 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13725 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13725 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13725 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13725 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13725 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13824 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13824 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:13825 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13825 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:13825 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:13825 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14110 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14110 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14111 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14112 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14111 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14112 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14111 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14111 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14111 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14111 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14111 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:14111 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14498 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14498 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14499 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14500 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14500 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14499 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14499 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14499 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14499 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14499 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14499 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:14499 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14852 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14852 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14854 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14853 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14853 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14854 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14854 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14854 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:14854 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14854 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:14854 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:14854 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1220 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1220 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1221 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1222 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1221 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1222 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1221 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1221 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1221 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1221 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1221 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:1221 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1290 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1802 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1802 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1803 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1804 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1803 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1804 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1803 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1803 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1803 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1803 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1803 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:1803 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1874 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:1928 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:1928 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:2024 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:2496 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2496 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2498 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2499 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2497 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2500 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:2500 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2500 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:2500 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2500 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2500 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:2500 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:2500 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:2662 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:3624 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3624 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3625 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3626 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3627 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3624 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:3624 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3624 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:3624 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3624 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3624 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:3624 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:3624 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4032 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4032 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4033 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4034 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4034 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4033 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4033 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4033 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4033 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4033 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:4033 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:4033 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:4882 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5236 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5236 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5237 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5238 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5236 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5239 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5239 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5239 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5239 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5239 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5239 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:5239 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5624 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5624 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5626 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5625 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5626 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5625 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5626 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5626 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5626 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5626 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5626 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:5743 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5743 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5743 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5743 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:5743 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5810 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5952 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5952 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:5952 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:5952 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:5952 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6315 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6315 - "GET /css/style.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6316 - "GET /vendor/g6/g6.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6317 - "GET /vendor/sql-formatter/sql-formatter.min.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6315 - "GET /vendor/monaco/vs/loader.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6318 - "GET /js/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6318 - "GET /vendor/monaco/vs/editor/editor.main.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6318 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6318 - "GET /vendor/monaco/vs/editor/editor.main.css HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6318 - "GET /vendor/monaco/vs/editor/editor.main.nls.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6318 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:6318 - "GET /vendor/monaco/vs/base/browser/ui/codicons/codicon/codicon.ttf HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:6318 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6533 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:6629 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7091 - "GET / HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:7091 - "GET /js/app.js HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:7091 - "GET /api/parsers HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7091 - "GET /vendor/monaco/vs/basic-languages/sql/sql.js HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:7092 - "POST /api/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:7147 - "POST /api/parse HTTP/1.1" 200 OK

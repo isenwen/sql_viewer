@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL 血缘查看器</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- 注意：G6 与 sql-formatter 必须在 Monaco 的 AMD loader 之前加载，
+       否则其 UMD 封装会注册成 AMD 模块而不挂载全局变量 -->
+  <script src="vendor/g6/g6.min.js"></script>
+  <script src="vendor/sql-formatter/sql-formatter.min.js"></script>
+  <script src="vendor/monaco/vs/loader.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">⬡</span>
+      <span class="title">SQL 血缘查看器</span>
+      <span class="subtitle">sqllineage → sqlglot → AI 兜底解析链</span>
+    </div>
+    <div id="aiBadge" class="ai-badge" title="AI 兜底解析器状态">AI 状态检测中…</div>
+  </header>
+
+  <main class="main">
+    <!-- 左侧：SQL 编辑区 -->
+    <aside class="editor-panel" id="editorPanel">
+      <div class="editor-toolbar">
+        <select id="dialectSelect" title="数据库类型"></select>
+        <select id="parserSelect" title="解析引擎（自动模式将逐级兜底）">
+          <option value="auto">引擎: 自动(逐级兜底)</option>
+          <option value="sqllineage">引擎: sqllineage</option>
+          <option value="sqlglot">引擎: sqlglot</option>
+          <option value="ai">引擎: AI 兜底</option>
+        </select>
+        <button id="btnParse" class="primary" title="Ctrl+Enter">解析</button>
+        <button id="btnFormat" title="Shift+Alt+F">美化</button>
+        <button id="btnUpload" title="上传 .sql 文件">上传SQL</button>
+        <input type="file" id="fileInput" accept=".sql,.txt,.ddl" hidden>
+        <select id="sampleSelect" title="示例">
+          <option value="">示例…</option>
+          <option value="join">JOIN 示例</option>
+          <option value="cte">CTE + 多语句</option>
+          <option value="star">SELECT * 示例</option>
+          <option value="bad">非法 SQL（兜底链演示）</option>
+        </select>
+        <select id="themeSelect" title="编辑器主题"></select>
+        <button id="btnClear" title="清空编辑器">清空</button>
+      </div>
+      <div id="editor"></div>
+      <div id="status" class="status" hidden></div>
+    </aside>
+
+    <div class="divider" id="divider" title="拖动调整宽度"></div>
+
+    <!-- 右侧：血缘图区 -->
+    <section class="canvas-panel">
+      <div class="canvas-toolbar">
+        <div class="seg" role="group" aria-label="血缘级别">
+          <button id="modeTable" class="seg-btn active">表级血缘</button>
+          <button id="modeField" class="seg-btn">字段级血缘</button>
+        </div>
+        <div class="tb-group">
+          <span class="tb-label">高亮</span>
+          <input type="color" id="hlColor" value="#fa541c" title="高亮颜色">
+          <button id="btnClearHl">清除高亮</button>
+        </div>
+        <div class="tb-group">
+          <label class="tb-label" style="cursor:pointer">
+            <input type="checkbox" id="wmToggle"> 水印
+          </label>
+          <input type="text" id="wmText" class="wm-input" value="SQL 血缘图 · 仅供内部使用" title="水印文字">
+        </div>
+        <div class="tb-group">
+          <button id="btnZoomIn" title="放大">＋</button>
+          <button id="btnZoomOut" title="缩小">－</button>
+          <button id="btnFit" title="自适应画布">自适应</button>
+          <button id="btnCenter" title="视图居中（保持缩放）">居中</button>
+          <span id="zoomPct" class="zoom-pct">100%</span>
+        </div>
+        <div class="tb-group">
+          <button id="btnDownloadSvg" class="primary" title="矢量图，无限放大不失真">下载 SVG</button>
+          <button id="btnDownloadPng" title="高清位图（3 倍分辨率）">下载 PNG</button>
+        </div>
+        <span id="statText" class="stat"></span>
+      </div>
+      <div class="canvas-wrap" id="canvasWrap">
+        <div id="graphContainer"></div>
+        <div id="watermark" class="watermark" hidden></div>
+        <div id="placeholder" class="placeholder">在左侧输入 SQL 并点击「解析」生成血缘图</div>
+        <div id="legend" class="legend">
+          <span><i class="dot" style="background:#1677ff"></i>源表</span>
+          <span><i class="dot" style="background:#52c41a"></i>目标表</span>
+          <span><i class="dot" style="background:#fa8c16"></i>中间表</span>
+          <span>点击表/字段可高亮血缘链路</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
