@@ -1,16 +1,19 @@
-# 需联网阶段
-# 基础镜像含 JRE，用于支持 Druid 解析引擎（无需 JDK，编译好的 helper jar 已内置）
-FROM eclipse-temurin:17-jre
+# SQL / DataX 血缘查看器
+# 基础镜像: python 3.11-slim（官方 pip 无 EXTERNALLY-MANAGED 标记，受支持的 Python 版本，
+#           依赖兼容性最好）+ 用 apt 装 headless JRE 供 Druid 引擎使用
+FROM python:3.11-slim
 
 WORKDIR /app
 
-# 装 Python 运行时与 pip
+# 装 headless JRE（Druid 引擎用，无需 JDK；编译好的 helper jar 已内置）与 curl（健康检查/运维）
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends python3 python3-pip python-is-python3 \
+    && apt-get install -y --no-install-recommends openjdk-17-jre-headless curl \
     && rm -rf /var/lib/apt/lists/*
 
-# pip 源由构建参数 PIP_INDEX_URL 指定，默认官方 pypi.org
-# 国内网络慢可在构建时覆盖: --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple
+# pip 源由构建参数 PIP_INDEX_URL 指定，默认官方 pypi.org。
+# 国内网络慢可在构建时覆盖:
+#   docker build --build-arg PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple .
+# 或 docker compose build --build-arg PIP_INDEX_URL=...
 ARG PIP_INDEX_URL=https://pypi.org/simple
 
 # 先装依赖，充分利用 Docker 层缓存（代码变更不触发重装）

@@ -1,6 +1,9 @@
 services:
   sql-viewer:
-    build: .
+    build:
+      context: .
+      args:
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
     image: sql-lineage-viewer:latest
     container_name: sql-lineage-viewer
     ports:

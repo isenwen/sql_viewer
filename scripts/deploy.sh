@@ -53,16 +53,14 @@ fi
 
 # ---------- 1. 构建镜像 ----------
 echo "[1/3] 构建镜像 $APP_NAME ..."
-# 透传 pip 源（宿主机可能被劫持，构建时用容器默认 pypi.org 或用户指定）
-BUILD_ARGS=()
-if [ -n "${PIP_INDEX_URL:-}" ]; then
-  BUILD_ARGS+=(--build-arg "PIP_INDEX_URL=$PIP_INDEX_URL")
-fi
+# 容器内 pip 用清华源（默认），避免宿主机被劫持的 pip 配置影响构建。
+# 如需改用其他源（如官方 pypi.org / 腾讯云公共源），设置环境变量 PIP_INDEX_URL=...
+BUILD_ARGS=(--build-arg "PIP_INDEX_URL=${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}")
 if [ "$PORT" = "$DEFAULT_PORT" ] && [ -n "$COMPOSE" ] && [ -f docker-compose.yml ]; then
-  $COMPOSE build ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
+  $COMPOSE build "${BUILD_ARGS[@]}"
 else
   # 自定义端口或无 compose：用 docker build + docker run
-  docker build -t "$APP_NAME:latest" "${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}" .
+  docker build -t "$APP_NAME:latest" "${BUILD_ARGS[@]}" .
 fi
 
 # ---------- 2. 启动容器 ----------

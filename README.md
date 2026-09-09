@@ -151,7 +151,7 @@ docker run -d -p 8866:8866 --name sql-viewer sql-lineage-viewer
 
 **端口**：compose 中 `ports: - "8866:8866"`，左边是宿主机端口，右边是容器内端口（固定 8866）。改左值即可换端口。
 
-**Druid 引擎**：无需配置，基础镜像 `eclipse-temurin:17-jre` 自带 JRE，开箱即用。
+**Druid 引擎**：无需配置，基础镜像 `python:3.11-slim` 会用 apt 装好 headless JRE（openjdk-17-jre-headless），Druid 开箱即用。
 
 **AI 兜底（可选，二选一）**：
 - 环境变量方式：在 `docker-compose.yml` 的 `services.sql-viewer.environment` 下取消注释并填入：
@@ -178,7 +178,7 @@ docker rmi sql-lineage-viewer   # 删除镜像
 
 ### 说明
 
-- 基础镜像为 `eclipse-temurin:17-jre`（自带 JRE），Druid 引擎开箱即用，无需额外安装 Java。
+- 基础镜像为 `python:3.11-slim`（官方 pip，无 PEP 668 `EXTERNALLY-MANAGED` 限制），镜像内用 apt 装好 headless JRE，Druid 引擎开箱即用。
 - 数据无状态：服务不存任何数据，重建镜像即可升级。
 - 健康检查：`GET /api/health`，镜像已内置 HEALTHCHECK。
 - 连不上：先 `docker compose logs -f` 看日志，再确认端口映射与宿主机防火墙。
@@ -260,7 +260,7 @@ viewer/
 │   ├── build_druid_helper.py  # 编译打包 DruidLineage 帮助类
 │   ├── deploy.sh              # CentOS 一键部署/启动（Docker 构建 + 启动）
 │   └── stop.sh                # CentOS 一键停止/清理（Docker）
-├── Dockerfile                 # Docker 镜像构建（eclipse-temurin 17-jre + Python）
+├── Dockerfile                 # Docker 镜像构建（python 3.11-slim + headless JRE）
 ├── docker-compose.yml         # 一键部署（端口 / AI 配置）
 ├── .dockerignore
 └── test_parsers.py            # 解析器冒烟测试（含 DataX / Druid 用例）
@@ -317,6 +317,6 @@ python test_parsers.py    # 典型 SQL、DataX 与 Druid 用例跑一遍解析�
 - **sqllineage 报方言不支持**：自动回退 ANSI 再试；sqlglot 与 AI 使用各自方言名（见 `backend/dialects.py`）。
 - **Druid 引擎不可用**：前端「Druid」下拉标注「不可用」并禁用。需本机安装 Java 8+，并确认 `backend/jars/` 下有 druid jar（运行 `python scripts/download_druid.py`）；不可用时自动模式会静默跳过，不影响其他引擎。Docker 镜像内置 JRE，无需处理。
 - **Docker 连不上**：先 `docker compose logs -f` 看日志；确认端口映射与宿主机防火墙；浏览器用 `http://<服务器IP>:8866/` 而非 `127.0.0.1`（若容器在远程服务器）。
-- **Docker 镜像构建慢**：首次需联网拉 `eclipse-temurin:17-jre` 基础镜像与 pip 依赖，之后有缓存；若构建时 `download_vendor.py` 需联网，可先保证网络或手动跑一次。
+- **Docker 镜像构建慢**：首次需联网拉 `python:3.11-slim` 基础镜像与 pip 依赖，之后有缓存。若构建时 `download_vendor.py` 需联网，可先保证网络或手动跑一次。
 - **字段级血缘不完整**：`SELECT *` 未知表结构时以 `*` 列表示；AI 兜底可补齐但需人工复核。
 - **DataX 字段级血缘缺失**：检查 `reader.column` / `writer.column` 是否配置且数量一致；`*` 通配或 `querySql` 解析失败时会降级为仅表级血缘并在警告中说明。
