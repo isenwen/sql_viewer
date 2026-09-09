@@ -17,9 +17,16 @@
     <div class="brand">
       <span class="logo">⬡</span>
       <span class="title">SQL 血缘查看器</span>
-      <span class="subtitle">sqllineage → sqlglot → AI 兜底解析链</span>
     </div>
+    <a class="github-link" href="https://github.com/isenwen/sql_viewer" target="_blank" rel="noopener"
+       title="GitHub: isenwen/sql_viewer">
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+      </svg>
+      <span class="gh-text">GitHub</span>
+    </a>
     <div id="aiBadge" class="ai-badge" title="AI 兜底解析器状态">AI 状态检测中…</div>
+    <button id="btnAiConfig" class="ai-config-btn" title="AI 兜底配置（仅当前浏览器会话有效，刷新即失效）">AI 配置</button>
   </header>
 
   <main class="main">
@@ -29,19 +36,22 @@
         <select id="dialectSelect" title="数据库类型"></select>
         <select id="parserSelect" title="解析引擎（自动模式将逐级兜底）">
           <option value="auto">引擎: 自动(逐级兜底)</option>
+          <option value="datax">引擎: DataX (JSON)</option>
           <option value="sqllineage">引擎: sqllineage</option>
           <option value="sqlglot">引擎: sqlglot</option>
+          <option value="druid">引擎: Druid</option>
           <option value="ai">引擎: AI 兜底</option>
         </select>
         <button id="btnParse" class="primary" title="Ctrl+Enter">解析</button>
         <button id="btnFormat" title="Shift+Alt+F">美化</button>
-        <button id="btnUpload" title="上传 .sql 文件">上传SQL</button>
-        <input type="file" id="fileInput" accept=".sql,.txt,.ddl" hidden>
+        <button id="btnUpload" title="上传 .sql / .json 文件">上传SQL</button>
+        <input type="file" id="fileInput" accept=".sql,.txt,.ddl,.json" hidden>
         <select id="sampleSelect" title="示例">
           <option value="">示例…</option>
           <option value="join">JOIN 示例</option>
           <option value="cte">CTE + 多语句</option>
           <option value="star">SELECT * 示例</option>
+          <option value="datax">DataX 同步任务示例</option>
           <option value="bad">非法 SQL（兜底链演示）</option>
         </select>
         <select id="themeSelect" title="编辑器主题"></select>
@@ -69,7 +79,7 @@
           <label class="tb-label" style="cursor:pointer">
             <input type="checkbox" id="wmToggle"> 水印
           </label>
-          <input type="text" id="wmText" class="wm-input" value="SQL 血缘图 · 仅供内部使用" title="水印文字">
+          <input type="text" id="wmText" class="wm-input" value="SQL 血缘图 · GitHub: isenwen" title="水印文字">
         </div>
         <div class="tb-group">
           <button id="btnZoomIn" title="放大">＋</button>
@@ -87,7 +97,7 @@
       <div class="canvas-wrap" id="canvasWrap">
         <div id="graphContainer"></div>
         <div id="watermark" class="watermark" hidden></div>
-        <div id="placeholder" class="placeholder">在左侧输入 SQL 并点击「解析」生成血缘图</div>
+        <div id="placeholder" class="placeholder">在左侧输入 SQL / DataX JSON 并点击「解析」生成血缘图</div>
         <div id="legend" class="legend">
           <span><i class="dot" style="background:#1677ff"></i>源表</span>
           <span><i class="dot" style="background:#52c41a"></i>目标表</span>
@@ -97,6 +107,38 @@
       </div>
     </section>
   </main>
+
+  <div id="aiModal" class="modal" hidden>
+    <div class="modal-box">
+      <div class="modal-head">
+        <span class="modal-title">AI 兜底配置</span>
+        <button id="aiModalClose" class="modal-x" title="关闭">✕</button>
+      </div>
+      <p class="modal-tip">配置仅保存在<b>当前浏览器会话</b>（sessionStorage），刷新或关闭标签页即失效，不会写入服务端。也可以直接点「测试」校验连通性。</p>
+      <div class="form-row">
+        <label for="aiBaseUrl">接口地址</label>
+        <input id="aiBaseUrl" type="text" placeholder="https://open.bigmodel.cn/api/paas/v4" autocomplete="off">
+      </div>
+      <div class="form-row">
+        <label for="aiApiKey">API Key</label>
+        <input id="aiApiKey" type="password" placeholder="sk-..." autocomplete="off">
+      </div>
+      <div class="form-row">
+        <label for="aiModel">模型名</label>
+        <input id="aiModel" type="text" placeholder="glm-4-flash" autocomplete="off">
+      </div>
+      <div class="form-row">
+        <label for="aiTimeout">超时(秒)</label>
+        <input id="aiTimeout" type="number" min="5" max="120" value="60">
+      </div>
+      <div id="aiTestResult" class="ai-test-result" hidden></div>
+      <div class="modal-actions">
+        <button id="btnAiTest" title="测试接口连通性">测试连接</button>
+        <button id="btnAiSave" class="primary">保存并启用</button>
+        <button id="btnAiDel" title="清除会话配置，恢复后端默认">清除配置</button>
+      </div>
+    </div>
+  </div>
 
   <script src="js/app.js"></script>
 </body>

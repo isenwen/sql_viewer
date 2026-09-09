@@ -20,12 +20,31 @@ class AiParser(BaseParser):
     name = "ai"
     label = "AI 兜底"
 
-    def parse(self, sql: str, dialect: str) -> dict:
-        cfg = load_ai_config()
+    @staticmethod
+    def session_config(options: dict | None) -> dict | None:
+        """从会话级 options 提取有效 AI 配置（网页配置，仅当次请求有效）。"""
+        ai = (options or {}).get("ai") or {}
+        api_key = str(ai.get("api_key", "") or "").strip()
+        if not api_key:
+            return None
+        try:
+            timeout = int(ai.get("timeout") or 60)
+        except (TypeError, ValueError):
+            timeout = 60
+        return {
+            "enabled": True,
+            "base_url": str(ai.get("base_url") or "").strip().rstrip("/") or "https://open.bigmodel.cn/api/paas/v4",
+            "api_key": api_key,
+            "model": str(ai.get("model") or "").strip() or "glm-4-flash",
+            "timeout": max(5, min(timeout, 300)),
+        }
+
+    def parse(self, sql: str, dialect: str, options: dict | None = None) -> dict:
+        cfg = self.session_config(options) or load_ai_config()
         if not cfg["enabled"]:
             raise ParseError(
-                "AI 解析器未配置：请设置环境变量 AI_API_KEY/AI_API_BASE/AI_MODEL，"
-                "或编辑 backend/ai_config.json"
+                "AI 解析器未配置：请在页面右上角「AI 配置」中填写（仅当前浏览器会话有效），"
+                "或设置环境变量 AI_API_KEY/AI_API_BASE/AI_MODEL，或编辑 backend/ai_config.json"
             )
 
         payload = {

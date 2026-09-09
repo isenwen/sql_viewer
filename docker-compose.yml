@@ -1,0 +1,17 @@
+services:
+  sql-viewer:
+    build: .
+    image: sql-lineage-viewer:latest
+    container_name: sql-lineage-viewer
+    ports:
+      - "8866:8866"
+    restart: unless-stopped
+    # 如需启用 AI 兜底解析器，取消注释并填入你的配置：
+    # environment:
+    #   AI_API_KEY: "你的APIKey"
+    #   AI_API_BASE: "https://open.bigmodel.cn/api/paas/v4"
+    #   AI_MODEL: "glm-4-flash"
+    #   AI_TIMEOUT: "60"
+    # 或者挂载本地配置文件：
+    # volumes:
+    #   - ./backend/ai_config.json:/app/backend/ai_config.json:ro

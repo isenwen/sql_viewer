@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 环境变量与本地运行产物
+.env
+server.log
+*.log
+
+# 前端依赖由 download_vendor.py 下载；保留 vendor 以便离线运行
+# （不忽略 static/vendor）
+
+# Druid jar 是运行依赖，保留不忽略
+# （不忽略 backend/jars/*.jar）
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

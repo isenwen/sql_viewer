@@ -1,0 +1,15 @@
+# 构建上下文中排除的内容，减小体积并避免干扰
+.git
+.gitignore
+.vscode
+__pycache__
+**/__pycache__
+*.pyc
+*.pyo
+.pytest_cache
+server.log
+*.log
+Dockerfile
+docker-compose.yml
+.dockerignore
+start.bat

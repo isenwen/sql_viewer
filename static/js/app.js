@@ -49,6 +49,69 @@ SELECT id FROM dim.users;`,
   star: `INSERT INTO db.tgt
 SELECT t.* FROM db.src1 t
 JOIN db.src2 s ON t.id = s.id`,
+  datax: `{
+  "job": {
+    "setting": { "speed": { "channel": 3 } },
+    "content": [
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "username": "etl",
+            "password": "******",
+            "column": ["id", "user_id", "amount"],
+            "splitPk": "id",
+            "connection": [{
+              "jdbcUrl": ["jdbc:mysql://127.0.0.1:3306/ods?useSSL=false"],
+              "table": ["orders"]
+            }],
+            "where": "dt = '2026-01-01'"
+          }
+        },
+        "writer": {
+          "name": "mysqlwriter",
+          "parameter": {
+            "username": "etl",
+            "password": "******",
+            "column": ["order_id", "uid", "amt"],
+            "connection": [{
+              "jdbcUrl": ["jdbc:mysql://127.0.0.1:3306/dw"],
+              "table": ["orders_sync"]
+            }]
+          }
+        }
+      },
+      {
+        "reader": {
+          "name": "mysqlreader",
+          "parameter": {
+            "connection": [{
+              "jdbcUrl": ["jdbc:mysql://127.0.0.1:3306/ods"],
+              "querySql": [
+                "SELECT o.id AS order_id, u.name AS user_name, o.amount FROM orders o LEFT JOIN users u ON o.user_id = u.id WHERE o.dt = \${bdp.system.bizdate}"
+              ]
+            }]
+          }
+        },
+        "writer": {
+          "name": "hdfswriter",
+          "parameter": {
+            "defaultFS": "hdfs://nn:8020",
+            "path": "/user/hive/warehouse/dw.db/order_detail/dt=2026-01-01",
+            "fileName": "part",
+            "writeMode": "append",
+            "fieldDelimiter": "\\u0001",
+            "column": [
+              { "name": "order_id", "type": "bigint" },
+              { "name": "user_name", "type": "string" },
+              { "name": "amount", "type": "double" }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}`,
   bad: `THIS IS NOT SQL AT ALL !!!`,
 };
 
@@ -59,7 +122,7 @@ const state = {
   theme: localStorage.getItem("sv_theme") || "vs-dark",
   hlColor: localStorage.getItem("sv_hlColor") || "#fa541c",
   wmOn: localStorage.getItem("sv_wmOn") === "1",
-  wmText: localStorage.getItem("sv_wmText") || "SQL 血缘图 · 仅供内部使用",
+  wmText: localStorage.getItem("sv_wmText") || "SQL 血缘图 · GitHub: isenwen",
   result: null,
 };
 
@@ -96,6 +159,19 @@ function setStatus(kind, lines) {
   el.hidden = false;
   el.className = "status " + kind;
   el.innerHTML = lines.map(escHtml).join("\n");
+}
+
+/* 根据内容自动切换编辑器语言：JSON（DataX 配置）或 SQL */
+function isJsonText(text) {
+  return /^\s*\{/.test(String(text));
+}
+
+function setEditorLanguage(text) {
+  if (!editor || !window.monaco) return;
+  const lang = isJsonText(text) ? "json" : "sql";
+  if (editor.getModel().getLanguageId() !== lang) {
+    monaco.editor.setModelLanguage(editor.getModel(), lang);
+  }
 }
 
 /* ============================ Monaco 编辑器 ============================ */
@@ -149,6 +225,14 @@ function initMonaco() {
 }
 
 function formatSql(sql) {
+  if (isJsonText(sql)) {
+    try {
+      return JSON.stringify(JSON.parse(sql), null, 2);
+    } catch (e) {
+      setStatus("err", ["JSON 格式化失败（不影响解析）: " + e.message]);
+      return sql;
+    }
+  }
   try {
     return sqlFormatter.format(sql, {
       language: FORMATTER_LANG[state.dialect] || "sql",
@@ -623,6 +707,19 @@ function applyWatermark() {
 
 /* ---------- 解析请求 ---------- */
 
+/* 会话级 AI 配置（仅当前浏览器 session 有效，服务端不落盘） */
+function readSessionAi() {
+  try {
+    return JSON.parse(sessionStorage.getItem("sv_ai") || "null");
+  } catch (e) {
+    return null;
+  }
+}
+function sessionAiOptions() {
+  const ai = readSessionAi();
+  return ai && ai.api_key ? { ai } : {};
+}
+
 async function doParse() {
   const sql = editor.getValue();
   if (!sql.trim()) { setStatus("err", ["SQL 内容为空"]); return; }
@@ -631,7 +728,7 @@ async function doParse() {
     const resp = await fetch("/api/parse", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sql, dialect: state.dialect, parser: state.parser }),
+      body: JSON.stringify({ sql, dialect: state.dialect, parser: state.parser, options: sessionAiOptions() }),
     });
     const data = await resp.json();
     if (!data.ok) {
@@ -646,9 +743,12 @@ async function doParse() {
     const lines = [
       `解析成功 · 引擎: ${data.parser} · 表 ${g.tables.length} · 表级边 ${g.table_edges.length} · 字段级边 ${g.column_edges.length}`,
     ];
-    (data.attempts || []).forEach((a) => {
-      if (!a.ok && a.message) lines.push(`  · ${a.parser} 失败: ${a.message}`);
-    });
+    // 兜底链中间引擎的失败细节只在最终失败时展示，成功时不制造噪音
+    if (!g.tables.length) {
+      (data.attempts || []).forEach((a) => {
+        if (!a.ok && a.message) lines.push(`  · ${a.parser} 失败: ${a.message}`);
+      });
+    }
     (g.warnings || []).forEach((w) => lines.push("  ⚠ " + w));
     setStatus("ok", lines);
   } catch (e) {
@@ -823,12 +923,19 @@ function bindUI() {
     const f = e.target.files[0];
     if (!f) return;
     const r = new FileReader();
-    r.onload = () => { editor.setValue(String(r.result)); setStatus("ok", [`已加载文件: ${f.name}`]); };
+    r.onload = () => {
+      editor.setValue(String(r.result));
+      setEditorLanguage(String(r.result));
+      setStatus("ok", [`已加载文件: ${f.name}`]);
+    };
     r.readAsText(f, "utf-8");
     e.target.value = "";
   };
   $("sampleSelect").onchange = (e) => {
-    if (e.target.value && SAMPLES[e.target.value]) editor.setValue(SAMPLES[e.target.value]);
+    if (e.target.value && SAMPLES[e.target.value]) {
+      editor.setValue(SAMPLES[e.target.value]);
+      setEditorLanguage(SAMPLES[e.target.value]);
+    }
     e.target.value = "";
   };
 
@@ -840,7 +947,11 @@ function bindUI() {
     const f = e.dataTransfer.files && e.dataTransfer.files[0];
     if (!f) return;
     const r = new FileReader();
-    r.onload = () => { editor.setValue(String(r.result)); setStatus("ok", [`已加载文件: ${f.name}`]); };
+    r.onload = () => {
+      editor.setValue(String(r.result));
+      setEditorLanguage(String(r.result));
+      setStatus("ok", [`已加载文件: ${f.name}`]);
+    };
     r.readAsText(f, "utf-8");
   });
 
@@ -904,16 +1015,93 @@ function bindUI() {
   });
   window.addEventListener("mouseup", () => (dragging = false));
 
-  // AI 状态
-  fetch("/api/parsers").then((r) => r.json()).then((d) => {
+  // AI 状态 + Druid 可用性 + AI 配置弹窗
+  const aiModal = $("aiModal");
+  const showAiModal = (show) => { aiModal.hidden = !show; };
+
+  $("btnAiConfig").onclick = () => {
+    const ai = readSessionAi() || {};
+    $("aiBaseUrl").value = ai.base_url || "";
+    $("aiApiKey").value = ai.api_key || "";
+    $("aiModel").value = ai.model || "";
+    $("aiTimeout").value = ai.timeout || 60;
+    const r = $("aiTestResult");
+    r.hidden = true;
+    showAiModal(true);
+  };
+  $("aiModalClose").onclick = () => showAiModal(false);
+  aiModal.addEventListener("click", (e) => { if (e.target === aiModal) showAiModal(false); });
+
+  $("btnAiSave").onclick = () => {
+    const val = {
+      base_url: $("aiBaseUrl").value.trim(),
+      api_key: $("aiApiKey").value.trim(),
+      model: $("aiModel").value.trim(),
+      timeout: Number($("aiTimeout").value) || 60,
+    };
+    if (!val.api_key) { setStatus("err", ["请填写 API Key"]); return; }
+    sessionStorage.setItem("sv_ai", JSON.stringify(val));
+    applyAiBadge();
+    showAiModal(false);
+    setStatus("ok", ["AI 会话配置已保存（仅当前浏览器会话有效，刷新即失效）"]);
+  };
+  $("btnAiDel").onclick = () => {
+    sessionStorage.removeItem("sv_ai");
+    applyAiBadge();
+    showAiModal(false);
+    setStatus("ok", ["已清除 AI 会话配置，恢复为后端默认配置"]);
+  };
+  $("btnAiTest").onclick = async () => {
+    const r = $("aiTestResult");
+    r.hidden = false;
+    r.className = "ai-test-result";
+    r.textContent = "正在测试连接…";
+    try {
+      const resp = await fetch("/api/ai/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          base_url: $("aiBaseUrl").value.trim(),
+          api_key: $("aiApiKey").value.trim(),
+          model: $("aiModel").value.trim(),
+          timeout: Number($("aiTimeout").value) || 60,
+        }),
+      });
+      const d = await resp.json();
+      r.className = "ai-test-result " + (d.ok ? "ok" : "err");
+      r.textContent = d.message;
+    } catch (e) {
+      r.className = "ai-test-result err";
+      r.textContent = "请求失败: " + e.message;
+    }
+  };
+
+  function applyAiBadge() {
     const b = $("aiBadge");
-    if (d.ai_configured) {
+    if (readSessionAi() && readSessionAi().api_key) {
+      b.textContent = "AI 兜底: 会话已配置 ✓";
+      b.className = "ai-badge on";
+    } else if (aiServerConfigured) {
       b.textContent = "AI 兜底: 已配置 ✓";
       b.className = "ai-badge on";
     } else {
-      b.textContent = "AI 兜底: 未配置（编辑 backend/ai_config.json 或环境变量 AI_API_KEY）";
+      b.textContent = "AI 兜底: 未配置，点「AI 配置」填写（当前会话）";
       b.className = "ai-badge off";
     }
+  }
+
+  let aiServerConfigured = false;
+  fetch("/api/parsers").then((r) => r.json()).then((d) => {
+    aiServerConfigured = !!d.ai_configured;
+    // 引擎可用性：标注 Druid 等不可用引擎
+    (d.parsers || []).forEach((p) => {
+      const opt = document.querySelector(`#parserSelect option[value="${p.name}"]`);
+      if (opt && p.available === false) {
+        opt.textContent = `${opt.textContent}（不可用）`;
+        opt.disabled = true;
+      }
+    });
+    applyAiBadge();
   }).catch(() => {
     const b = $("aiBadge");
     b.textContent = "后端未连接";

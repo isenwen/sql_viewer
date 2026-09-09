@@ -43,6 +43,72 @@ body {
 .ai-badge.on { background: rgba(82, 196, 26, .18); color: #86efac; }
 .ai-badge.off { background: rgba(148, 163, 184, .18); color: #94a3b8; }
 
+.ai-config-btn {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(22, 119, 255, .16);
+  color: #93c5fd;
+  border: 1px solid rgba(22, 119, 255, .3);
+  cursor: pointer;
+  margin-left: 8px;
+}
+.ai-config-btn:hover { background: rgba(22, 119, 255, .28); }
+
+/* ---------- 顶栏 GitHub 链接 ---------- */
+.github-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-left: auto;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  color: #94a3b8;
+  text-decoration: none;
+  background: rgba(148, 163, 184, .12);
+  border: 1px solid rgba(148, 163, 184, .25);
+}
+.github-link:hover { color: #e2e8f0; background: rgba(148, 163, 184, .22); }
+.github-link .gh-text { line-height: 1; }
+.github-link svg { display: block; }
+
+/* ---------- AI 配置弹窗 ---------- */
+.modal {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(2, 6, 23, .55);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal[hidden] { display: none; }
+.modal-box {
+  width: 460px; max-width: 92vw;
+  background: #111827; color: #e5e7eb;
+  border: 1px solid #334155; border-radius: 12px;
+  padding: 20px 22px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.5);
+}
+.modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.modal-title { font-size: 15px; font-weight: 600; color: #f1f5f9; }
+.modal-x { background: transparent; border: none; color: #94a3b8; font-size: 16px; cursor: pointer; padding: 2px 6px; }
+.modal-x:hover { color: #e2e8f0; }
+.modal-tip { font-size: 12px; color: #94a3b8; margin: 0 0 14px; line-height: 1.5; }
+.form-row { display: flex; align-items: center; margin-bottom: 10px; }
+.form-row label { width: 96px; flex: none; font-size: 13px; color: #cbd5e1; }
+.form-row input {
+  flex: 1; font-size: 13px; padding: 6px 8px;
+  background: #0b1220; color: #f1f5f9;
+  border: 1px solid #334155; border-radius: 6px;
+}
+.form-row input:focus { outline: none; border-color: #1677ff; }
+.ai-test-result {
+  font-size: 12px; margin: 4px 0 10px 96px; padding: 6px 10px;
+  border-radius: 6px; line-height: 1.4; word-break: break-all;
+}
+.ai-test-result.ok { background: rgba(82,196,26,.12); color: #86efac; }
+.ai-test-result.err { background: rgba(255,77,79,.12); color: #fca5a5; }
+.modal-actions { display: flex; gap: 10px; margin-top: 12px; }
+.modal-actions button { flex: 1; padding: 8px; font-size: 13px; border-radius: 6px; }
+.modal-actions .primary { background: #1677ff; color: #fff; border: none; }
+.modal-actions button:not(.primary) { background: #1f2937; color: #e5e7eb; border: 1px solid #374151; }
+
 /* ---------- 主区 ---------- */
 .main { flex: 1; display: flex; min-height: 0; }
 

@@ -13,14 +13,22 @@ class BaseParser:
     name: str = "base"
     label: str = "基础解析器"
 
-    def parse(self, sql: str, dialect: str) -> dict:
-        """返回统一结构 {"tables", "table_edges", "column_edges", "warnings"}，失败抛 ParseError。"""
+    @classmethod
+    def is_available(cls) -> bool:
+        """解析引擎当前是否可用（用于前端展示就绪状态）。"""
+        return True
+
+    def parse(self, sql: str, dialect: str, options: dict | None = None) -> dict:
+        """返回统一结构 {"tables", "table_edges", "column_edges", "warnings"}，失败抛 ParseError。
+
+        options: 会话级配置（如 {"ai": {...}}），仅当次解析有效，服务端不持久化。
+        """
         raise NotImplementedError
 
-    def parse_safe(self, sql: str, dialect: str):
+    def parse_safe(self, sql: str, dialect: str, options: dict | None = None):
         """永不抛异常：返回 (graph | None, message)。"""
         try:
-            graph = self.parse(sql, dialect)
+            graph = self.parse(sql, dialect, options)
             if not graph.get("tables"):
                 raise ParseError("未能从 SQL 中提取到任何表")
             return graph, ""

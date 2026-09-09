@@ -60,7 +60,7 @@ class SqlglotParser(BaseParser):
     name = "sqlglot"
     label = "sqlglot"
 
-    def parse(self, sql: str, dialect: str) -> dict:
+    def parse(self, sql: str, dialect: str, options: dict | None = None) -> dict:
         d = get_dialect(dialect)
         read = d["sqlglot"]
         try:

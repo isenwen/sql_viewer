@@ -17,5 +17,7 @@ if __name__ == "__main__":
         except Exception:
             pass
 
-    threading.Timer(1.2, _open).start()
+    # 仅本地运行时自动打开浏览器（容器内 host=0.0.0.0，打开浏览器无意义）
+    if host in ("127.0.0.1", "localhost") and os.environ.get("NO_BROWSER") != "1":
+        threading.Timer(1.2, _open).start()
     uvicorn.run("backend.app:app", host=host, port=port, log_level="info")

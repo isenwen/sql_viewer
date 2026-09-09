@@ -34,7 +34,7 @@ class SqlLineageParser(BaseParser):
     name = "sqllineage"
     label = "sqllineage"
 
-    def parse(self, sql: str, dialect: str) -> dict:
+    def parse(self, sql: str, dialect: str, options: dict | None = None) -> dict:
         d = get_dialect(dialect)
         warnings: list[str] = []
         runner = None
