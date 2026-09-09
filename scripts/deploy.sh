@@ -58,7 +58,9 @@ for m in ("fastapi","uvicorn","sqllineage","sqlglot","requests","pydantic"):
 PY
 then
   echo "      安装依赖 requirements.txt ..."
-  "$PY" -m pip install -r requirements.txt
+  # 默认强制用清华镜像：服务器 pip 全局源常已过期/失效（如 mirrors.tencentyun.com 的 fastapi 停在 0.83）。
+  # 如需改用其他源，设置环境变量 PIP_INDEX_URL=... 覆盖。
+  "$PY" -m pip install -r requirements.txt -i "${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}" 2>&1 | tail -30
 else
   echo "      依赖已安装。"
 fi
