@@ -50,13 +50,13 @@ fi
 
 # ---------- 2. Python 依赖 ----------
 echo "[2/4] 检查 Python 依赖..."
-"$PY" - <<'PY' >/dev/null 2>&1
+if ! "$PY" - <<'PY' >/dev/null 2>&1
 import importlib.util
 for m in ("fastapi","uvicorn","sqllineage","sqlglot","requests","pydantic"):
     if importlib.util.find_spec(m) is None:
         raise SystemExit(1)
 PY
-if [ $? -ne 0 ]; then
+then
   echo "      安装依赖 requirements.txt ..."
   "$PY" -m pip install -r requirements.txt
 else
