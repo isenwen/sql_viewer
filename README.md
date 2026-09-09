@@ -102,11 +102,9 @@ AI 解析器默认关闭。配置任一 OpenAI 兼容接口即可启用：
 
 配置后顶部状态栏显示「AI 兜底: 已配置」。AI 结果仅供参考，界面会附加提示。
 
-## Docker 部署（推荐）
+## Docker 部署（可选）
 
-服务端无状态、不依赖外网（前端静态库与 Druid jar 已内置于镜像）。两种方式任选其一。
-
-> 服务器（如 CentOS）部署：推荐直接用项目内置的 **[一键脚本](#centos-一键部署脚本)**，自动构建、启动、健康检查，停止也有对应脚本。
+> 本服务主要面向服务器（如 CentOS）的**纯本机**部署，优先用 [CentOS 一键脚本](#centos-一键部署脚本)。如果你已有 Docker 环境，也可用下面两种方式部署（仓库内置 `Dockerfile` / `docker-compose.yml`）。
 
 ### 方式一：docker compose（最简单）
 
@@ -185,7 +183,7 @@ docker rmi sql-lineage-viewer   # 删除镜像
 
 ## CentOS 一键部署脚本
 
-面向服务器（CentOS / RHEL 等 Linux）的腾讯云/阿里云场景，项目内置两个 bash 脚本，自动完成构建、启动、健康检查与停止清理。脚本**优先用 Docker**，若机器没有 docker 则自动回退本机 python3 运行，两种环境都能用。
+面向服务器（CentOS / RHEL 等 Linux）场景，项目内置两个 bash 脚本，**纯本机 python3 运行，不依赖 Docker**，自动完成环境检查、后台启动、健康检查与停止清理。
 
 ### 启动
 
@@ -194,19 +192,18 @@ docker rmi sql-lineage-viewer   # 删除镜像
 git clone https://github.com/isenwen/sql_viewer.git
 cd sql_viewer
 
-# 一键部署（Docker 优先，自动健康检查；无 docker 则回退本机）
+# 一键部署（纯本机，自动健康检查）
 bash scripts/deploy.sh
 ```
 
-自定义端口或强制本机模式：
+自定义端口：
 
 ```bash
 bash scripts/deploy.sh --port 9000        # 部署到 9000 端口
-bash scripts/deploy.sh --no-docker        # 不使用 Docker，强制本机 python3
 bash scripts/deploy.sh --help             # 查看所有参数
 ```
 
-脚本会：检查/下载前端静态库 vendor → Docker 构建并后台启动（或本机 nohup 启动）→ 轮询 `GET /api/health` 等待就绪 → 打印访问地址与日志命令。
+脚本会：检查 python3 → 下载/校验前端静态库 vendor（离线已内置于仓库则跳过）→ 安装 Python 依赖（已有则跳过）→ 检查 Druid 引擎依赖（Java，可选）→ `nohup` 后台启动（`HOST=0.0.0.0`）→ 轮询 `GET /api/health` 等待就绪 → 打印访问地址与日志命令。
 
 ### 停止
 
@@ -214,14 +211,14 @@ bash scripts/deploy.sh --help             # 查看所有参数
 bash scripts/stop.sh
 ```
 
-自动识别并停止：Docker 容器 / compose 服务 / 本机后台进程，并清理 pid 文件。日志保留在 `server.log`（本机模式）。
+按 `deploy.sh` 记录的 pid 文件停止服务，并清理 pid 文件；若 pid 文件丢失，会按进程名兜底查找残留的 `run.py` 进程并停止。日志保留在 `server.log`。
 
 ### 说明
 
 - **权限**：脚本已带可执行位（`100755`），克隆后可直接 `bash scripts/xxx.sh` 运行；也可手动 `chmod +x`。
 - **换行**：脚本为 LF 格式，兼容 Linux 终端。
-- **依赖**：`deploy.sh` 需要 `curl`（健康检查用）与 `python3`（vendor 下载兜底）。CentOS 若缺 `curl`：`yum install -y curl`。
-- **查看日志**：Docker 模式 `docker logs -f sql-viewer`；本机模式 `tail -f server.log`。
+- **依赖**：`deploy.sh` 需要 `python3`、`pip`、`curl`（健康检查用）。CentOS 若缺：`yum install -y python3 python3-pip curl`。Druid 引擎可选，装 Java 才能用：`yum install -y java-1.8.0-openjdk-headless`（不装则自动模式跳过 Druid，不影响其他引擎）。
+- **查看日志**：`tail -f server.log`。
 
 ## 项目结构
 
@@ -253,8 +250,8 @@ viewer/
 │   ├── download_vendor.py     # 前端依赖下载脚本（多镜像）
 │   ├── download_druid.py      # 下载 druid jar
 │   ├── build_druid_helper.py  # 编译打包 DruidLineage 帮助类
-│   ├── deploy.sh              # CentOS 一键部署/启动（Docker 优先，需 bash）
-│   └── stop.sh                # CentOS 一键停止/清理（需 bash）
+│   ├── deploy.sh              # CentOS 一键部署/启动（纯本机 python3，不依赖 Docker）
+│   └── stop.sh                # CentOS 一键停止/清理（纯本机）
 ├── Dockerfile                 # Docker 镜像构建（eclipse-temurin 17-jre + Python）
 ├── docker-compose.yml         # 一键部署（端口 / AI 配置）
 ├── .dockerignore
