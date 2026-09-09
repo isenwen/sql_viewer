@@ -35,6 +35,10 @@
 
 ## 快速开始
 
+> 想用 Docker 一步部署？直接参考下方 **[Docker 部署](#docker-部署推荐)** 一节即可。
+
+### 本地运行（需 Python 3.10+）
+
 ```bash
 # 1. 安装依赖
 pip install -r requirements.txt
@@ -42,7 +46,10 @@ pip install -r requirements.txt
 # 2. 下载前端静态库（首次运行前，支持 npmmirror/unpkg/jsdelivr 自动切换）
 python scripts/download_vendor.py
 
-# 3. 启动（自动打开浏览器）
+# 3. 下载 Druid jar（首次运行 Druid 引擎前；已随仓库内置则跳过）
+python scripts/download_druid.py
+
+# 4. 启动（自动打开浏览器）
 python run.py
 ```
 
@@ -95,24 +102,126 @@ AI 解析器默认关闭。配置任一 OpenAI 兼容接口即可启用：
 
 配置后顶部状态栏显示「AI 兜底: 已配置」。AI 结果仅供参考，界面会附加提示。
 
-## Docker 部署
+## Docker 部署（推荐）
+
+服务端无状态、不依赖外网（前端静态库与 Druid jar 已内置于镜像）。两种方式任选其一。
+
+> 服务器（如 CentOS）部署：推荐直接用项目内置的 **[一键脚本](#centos-一键部署脚本)**，自动构建、启动、健康检查，停止也有对应脚本。
+
+### 方式一：docker compose（最简单）
+
+前提：已安装 Docker Desktop（Windows / macOS）或 Docker Engine（Linux）。
 
 ```bash
-# 构建并运行（docker compose）
+# 克隆代码
+git clone https://github.com/isenwen/sql_viewer.git
+cd sql_viewer
+
+# 首次：构建并后台启动
 docker compose up -d --build
 
-# 或使用 docker 命令
+# 查看日志
+docker compose logs -f
+```
+
+访问 http://127.0.0.1:8866/ （服务器上则用 http://<服务器IP>:8866/）。
+
+### 方式二：docker 命令行
+
+```bash
+# 构建镜像
 docker build -t sql-lineage-viewer .
+
+# 运行容器（-d 后台，-p 映射端口，--name 命名）
 docker run -d -p 8866:8866 --name sql-viewer sql-lineage-viewer
 ```
 
-访问 http://<服务器IP>:8866/ 。镜像内已包含前端静态库与 Druid jarlib，运行时不依赖外网。
+### 常用操作
 
-- 修改端口：把 compose 中 `"8866:8866"` 左侧改为宿主机端口即可
-- 启用 AI 兜底：在 `docker-compose.yml` 中取消 `environment` 注释并填入 API Key（或挂载 `backend/ai_config.json`，见文件内说明）
-- 数据无状态：服务本身不存任何数据，升级镜像直接 `docker compose up -d --build` 重建即可
-- 健康检查：`GET /api/health`，镜像已内置 HEALTHCHECK
-- 基础镜像为 `eclipse-temurin:17-jre`（自带 JRE），Druid 引擎因此开箱即用，无需额外安装 Java
+| 操作 | 命令 |
+| --- | --- |
+| 后台启动 | `docker compose up -d` |
+| 查看日志 | `docker compose logs -f` |
+| 停止 | `docker compose down` |
+| 重建（升级镜像） | `docker compose up -d --build` |
+| 换端口 | 修改 compose 的 `"8866:8866"` 左侧为宿主机端口，如 `"9000:8866"` |
+| 指定宿主 IP 监听 | 端口可写成 `"0.0.0.0:8866:8866"` 暴露到局域网 |
+
+### 配置项
+
+**端口**：compose 中 `ports: - "8866:8866"`，左边是宿主机端口，右边是容器内端口（固定 8866）。改左值即可换端口。
+
+**Druid 引擎**：无需配置，基础镜像 `eclipse-temurin:17-jre` 自带 JRE，开箱即用。
+
+**AI 兜底（可选，二选一）**：
+- 环境变量方式：在 `docker-compose.yml` 的 `services.sql-viewer.environment` 下取消注释并填入：
+  ```yaml
+  environment:
+    AI_API_KEY: "你的APIKey"
+    AI_API_BASE: "https://open.bigmodel.cn/api/paas/v4"
+    AI_MODEL: "glm-4-flash"
+    AI_TIMEOUT: "60"
+  ```
+- 挂载配置文件：把本机 `backend/ai_config.json` 挂进容器：
+  ```yaml
+  volumes:
+    - ./backend/ai_config.json:/app/backend/ai_config.json:ro
+  ```
+  也可直接在网页右上角「AI 配置」填入，仅当前浏览器会话有效，无需改容器。
+
+### 停止 / 卸载
+
+```bash
+docker compose down        # 停止并删除容器（不删镜像）
+docker rmi sql-lineage-viewer   # 删除镜像
+```
+
+### 说明
+
+- 基础镜像为 `eclipse-temurin:17-jre`（自带 JRE），Druid 引擎开箱即用，无需额外安装 Java。
+- 数据无状态：服务不存任何数据，重建镜像即可升级。
+- 健康检查：`GET /api/health`，镜像已内置 HEALTHCHECK。
+- 连不上：先 `docker compose logs -f` 看日志，再确认端口映射与宿主机防火墙。
+
+## CentOS 一键部署脚本
+
+面向服务器（CentOS / RHEL 等 Linux）的腾讯云/阿里云场景，项目内置两个 bash 脚本，自动完成构建、启动、健康检查与停止清理。脚本**优先用 Docker**，若机器没有 docker 则自动回退本机 python3 运行，两种环境都能用。
+
+### 启动
+
+```bash
+# 克隆代码（已克隆可跳过）
+git clone https://github.com/isenwen/sql_viewer.git
+cd sql_viewer
+
+# 一键部署（Docker 优先，自动健康检查；无 docker 则回退本机）
+bash scripts/deploy.sh
+```
+
+自定义端口或强制本机模式：
+
+```bash
+bash scripts/deploy.sh --port 9000        # 部署到 9000 端口
+bash scripts/deploy.sh --no-docker        # 不使用 Docker，强制本机 python3
+bash scripts/deploy.sh --help             # 查看所有参数
+```
+
+脚本会：检查/下载前端静态库 vendor → Docker 构建并后台启动（或本机 nohup 启动）→ 轮询 `GET /api/health` 等待就绪 → 打印访问地址与日志命令。
+
+### 停止
+
+```bash
+bash scripts/stop.sh
+```
+
+自动识别并停止：Docker 容器 / compose 服务 / 本机后台进程，并清理 pid 文件。日志保留在 `server.log`（本机模式）。
+
+### 说明
+
+- **权限**：脚本已带可执行位（`100755`），克隆后可直接 `bash scripts/xxx.sh` 运行；也可手动 `chmod +x`。
+- **换行**：脚本为 LF 格式，兼容 Linux 终端。
+- **依赖**：`deploy.sh` 需要 `curl`（健康检查用）与 `python3`（vendor 下载兜底）。CentOS 若缺 `curl`：`yum install -y curl`。
+- **查看日志**：Docker 模式 `docker logs -f sql-viewer`；本机模式 `tail -f server.log`。
 
 ## 项目结构
 
@@ -143,7 +252,9 @@ viewer/
 ├── scripts/
 │   ├── download_vendor.py     # 前端依赖下载脚本（多镜像）
 │   ├── download_druid.py      # 下载 druid jar
-│   └── build_druid_helper.py  # 编译打包 DruidLineage 帮助类
+│   ├── build_druid_helper.py  # 编译打包 DruidLineage 帮助类
+│   ├── deploy.sh              # CentOS 一键部署/启动（Docker 优先，需 bash）
+│   └── stop.sh                # CentOS 一键停止/清理（需 bash）
 ├── Dockerfile                 # Docker 镜像构建（eclipse-temurin 17-jre + Python）
 ├── docker-compose.yml         # 一键部署（端口 / AI 配置）
 ├── .dockerignore
@@ -196,9 +307,11 @@ python test_parsers.py    # 典型 SQL、DataX 与 Druid 用例跑一遍解析�
 
 ## 常见问题
 
-- **端口占用**：`PORT=9000 python run.py` 换端口。
+- **端口占用**：`PORT=9000 python run.py` 换端口；Docker 下改 compose 的 `"8866:8866"` 左值。
 - **离线环境**：`static/vendor` 已本地化，运行时不依赖外网；仅在首次下载依赖库时需要网络。
 - **sqllineage 报方言不支持**：自动回退 ANSI 再试；sqlglot 与 AI 使用各自方言名（见 `backend/dialects.py`）。
-- **Druid 引擎不可用**：前端「Druid」下拉标注「不可用」并禁用。需本机安装 Java 8+，并确认 `backend/jars/` 下有 druid jar（运行 `python scripts/download_druid.py`）；不可用时自动模式会静默跳过，不影响其他引擎。
+- **Druid 引擎不可用**：前端「Druid」下拉标注「不可用」并禁用。需本机安装 Java 8+，并确认 `backend/jars/` 下有 druid jar（运行 `python scripts/download_druid.py`）；不可用时自动模式会静默跳过，不影响其他引擎。Docker 镜像内置 JRE，无需处理。
+- **Docker 连不上**：先 `docker compose logs -f` 看日志；确认端口映射与宿主机防火墙；浏览器用 `http://<服务器IP>:8866/` 而非 `127.0.0.1`（若容器在远程服务器）。
+- **Docker 镜像构建慢**：首次需联网拉 `eclipse-temurin:17-jre` 基础镜像与 pip 依赖，之后有缓存；若构建时 `download_vendor.py` 需联网，可先保证网络或手动跑一次。
 - **字段级血缘不完整**：`SELECT *` 未知表结构时以 `*` 列表示；AI 兜底可补齐但需人工复核。
 - **DataX 字段级血缘缺失**：检查 `reader.column` / `writer.column` 是否配置且数量一致；`*` 通配或 `querySql` 解析失败时会降级为仅表级血缘并在警告中说明。
